@@ -43,9 +43,9 @@ class ShopCartTest extends AnyFunSuite:
     assert(result == 0.25)
   }
 
-  test("should return 1.20 for ['Apple', 'Apple']") {
+  test("should return 0.6 for ['Apple', 'Apple'] with BuyOneGetOneFree offer") {
     val result = ShopCart.calcTotal(List.fill(2)("Apple"))
-    assert(result == 1.20)
+    assert(result == 0.6)
   }
 
   test("should return 0.50 for ['Orange', 'Orange']") {
@@ -53,24 +53,29 @@ class ShopCartTest extends AnyFunSuite:
     assert(result == 0.50)
   }
 
-  test("should return 1.80 for ['Apple', 'Apple', 'Apple']") {
+  test("should return 1.20 for ['Apple', 'Apple', 'Apple'] with BuyOneGetOneFree offer") {
     val result = ShopCart.calcTotal(List.fill(3)("Apple"))
-    assert(result == 1.80)
+    assert(result == 1.20)
   }
 
-  test("should return 0.50 for ['Orange', 'Orange', 'Orange']") {
+  test("should return 0.50 for ['Orange', 'Orange', 'Orange'] with BuyTwoGetOneFree offer") {
     val result = ShopCart.calcTotal(List.fill(3)("Orange"))
-    assert(result == 0.75)
+    assert(result == 0.50)
   }
 
-  test("should return 0.50 for ['Apple', 'Apple', 'Orange', 'Apple']") {
+  test("should return 1.45 for ['Apple', 'Apple', 'Orange', 'Apple'] with BuyOneGetOneFree offer") {
     val result = ShopCart.calcTotal(List("Apple", "Apple", "Orange", "Apple"))
-    assert(result == 2.05)
+    assert(result == 1.45)
   }
 
-  test("should return 4.75 for ['INVALID', 'Apple', 'Apple', 'Orange', 'Orange', 'Apple', 'Apple', 'Apple', 'Orange', 'Orange', 'Orange', 'Orange', 'Orange', 'InVaLiD']") {
+  test("should return 1.95 for ['Apple', 'Apple', 'Orange', 'Apple', 'Orange', 'Orange', 'Orange'] with BuyOneGetOneFree offer AND BuyTwoGetOneFree offer") {
+    val result = ShopCart.calcTotal(List("Apple", "Apple", "Orange", "Apple", "Orange", "Orange", "Orange"))
+    assert(result == 1.95)
+  }
+
+  test("should return 3.05 for ['INVALID', 'Apple', 'Apple', 'Orange', 'Orange', 'Apple', 'Apple', 'Apple', 'Orange', 'Orange', 'Orange', 'Orange', 'Orange', 'InVaLiD']") {
     val result = ShopCart.calcTotal(List("INVALID", "Apple", "Apple", "Orange", "Orange", "Apple", "Apple", "Apple", "Orange", "Orange", "Orange", "Orange", "Orange", "InVaLiD"))
-    assert(result == 4.75)
+    assert(result == 3.05)
   }
 
 end ShopCartTest
