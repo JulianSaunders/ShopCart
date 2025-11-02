@@ -2,27 +2,27 @@
 
 object ShopCart {
 
-  trait Offer {
-    def calcOfferPrice(quantity: Int, item: Item): BigDecimal
+  sealed trait Offer {
+    def calcPriceWithOffer(quantity: Int, item: Item): BigDecimal
   }
 
   private class BuyOneGetOneFree extends Offer {
-    override def calcOfferPrice(quantity: Int, item: Item): BigDecimal = {
-      val redeemedUnitsBilled = quantity / 2
-      val remainderUnits = quantity - (redeemedUnitsBilled * 2)
-      val totalUnitsBilled = redeemedUnitsBilled + remainderUnits
-      if (redeemedUnitsBilled > 0) println(s"BuyOneGetOneFree offer applied for '${item.sku}' quantity=$quantity  redeemedUnitsBilled=$redeemedUnitsBilled  remainderUnits=$remainderUnits  totalUnitsBilled=$totalUnitsBilled")
-      totalUnitsBilled * item.price
+    override def calcPriceWithOffer(quantity: Int, item: Item): BigDecimal = {
+      val redeemedOfferUnits = quantity / 2
+      val remainderUnits = quantity - (redeemedOfferUnits * 2)
+      val totalUnitsToBill = redeemedOfferUnits + remainderUnits
+      if (redeemedOfferUnits > 0) println(s"BuyOneGetOneFree offer applied for '${item.sku}' quantity=$quantity  redeemedOfferUnits=$redeemedOfferUnits  remainderUnits=$remainderUnits  totalUnitsToBill=$totalUnitsToBill")
+      totalUnitsToBill * item.price
     }
   }
 
   private class BuyTwoGetOneFree extends Offer {
-    override def calcOfferPrice(quantity: Int, item: Item): BigDecimal = {
-      val redeemedCount = quantity / 3
-      val remainderUnits = quantity - (redeemedCount * 3)
-      val totalUnitsBilled = (redeemedCount * 2) + remainderUnits
-      if (redeemedCount > 0) println(s"BuyTwoGetOneFree offer applied for '${item.sku}'  quantity=$quantity  redeemedCount=$redeemedCount  remainderUnits=$remainderUnits  totalUnitsBilled=$totalUnitsBilled")
-      totalUnitsBilled * item.price
+    override def calcPriceWithOffer(quantity: Int, item: Item): BigDecimal = {
+      val redeemedOfferCount = quantity / 3
+      val remainderUnits = quantity - (redeemedOfferCount * 3)
+      val totalUnitsToBill = (redeemedOfferCount * 2) + remainderUnits
+      if (redeemedOfferCount > 0) println(s"BuyTwoGetOneFree offer applied for '${item.sku}'  quantity=$quantity  redeemedOfferCount=$redeemedOfferCount  remainderUnits=$remainderUnits  totalUnitsToBill=$totalUnitsToBill")
+      totalUnitsToBill * item.price
     }
   }
 
@@ -34,11 +34,11 @@ object ShopCart {
   )
 
   def calcTotal(items: List[String]): BigDecimal = {
-    val itemCounts = items.map(_.trim.toLowerCase).filter(products.isDefinedAt).groupMapReduce(identity)(b => 1)(_ + _)
+    val itemCounts = items.map(_.trim.toLowerCase).filter(products.isDefinedAt).groupMapReduce(identity)(_ => 1)(_ + _)
     println(s"-------\nitemCounts= $itemCounts")
 
-    val sumOfItemTotalsWithOffers = itemCounts.map((key, quantity) => products(key).offer.calcOfferPrice(quantity, products(key))).sum
-    println(s"sumOfItemTotalsWithOffers = $sumOfItemTotalsWithOffers")
+    val sumOfItemTotalsWithOffers = itemCounts.map((key, quantity) => products(key).offer.calcPriceWithOffer(quantity, products(key))).sum
+    println(s"${itemCounts.mkString("[", ",", "]")} => £$sumOfItemTotalsWithOffers")
     sumOfItemTotalsWithOffers
   }
 
