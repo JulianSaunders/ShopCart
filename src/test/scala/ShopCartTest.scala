@@ -1,30 +1,30 @@
 
-import ShopCart.{BuyOneGetOneFree, BuyTwoGetOneFree, Item, NoOffer}
+import ShopCart.{BuyOneGetOneFree, BuyTwoGetOneFree, Item, NoOffer, NoOffer2, OfferCheapestFree}
 import org.scalatest.funsuite.AnyFunSuite
 
 class ShopCartTest extends AnyFunSuite:
 
   val products1 = Map(
-    "apple" -> Item("apple", price = 0.60, BuyOneGetOneFree()),
-    "orange" -> Item("orange", price = 0.25, BuyTwoGetOneFree())
+    "apple" -> Item("apple", price = 0.60, BuyOneGetOneFree(), NoOffer2()),
+    "orange" -> Item("orange", price = 0.25, BuyTwoGetOneFree(), NoOffer2())
   )
 
   val products2_bananaCheapest = Map(
-    "apple" -> Item("apple", price = 0.60, BuyOneGetOneFree()),
-    "orange" -> Item("orange", price = 0.25, BuyTwoGetOneFree()),
-    "banana" -> Item("banana", price = 0.20, NoOffer())
+    "apple" -> Item("apple", price = 0.60, BuyOneGetOneFree(), NoOffer2()),
+    "orange" -> Item("orange", price = 0.25, BuyTwoGetOneFree(), NoOffer2()),
+    "banana" -> Item("banana", price = 0.20, NoOffer(), OfferCheapestFree("apple", "banana"))
   )
 
   val products3_appleCheapest = Map(
-    "apple" -> Item("apple", price = 0.10, BuyOneGetOneFree()),
-    "orange" -> Item("orange", price = 0.25, BuyTwoGetOneFree()),
-    "banana" -> Item("banana", price = 0.20, NoOffer())
+    "apple" -> Item("apple", price = 0.10, BuyOneGetOneFree(), OfferCheapestFree("apple", "banana")),
+    "orange" -> Item("orange", price = 0.25, BuyTwoGetOneFree(), NoOffer2()),
+    "banana" -> Item("banana", price = 0.20, NoOffer(), NoOffer2())
   )
 
   val products4_appleSamePriceAsBanana = Map(
-    "apple" -> Item("apple", price = 0.20, BuyOneGetOneFree()),
-    "orange" -> Item("orange", price = 0.25, BuyTwoGetOneFree()),
-    "banana" -> Item("banana", price = 0.20, NoOffer())
+    "apple" -> Item("apple", price = 0.20, BuyOneGetOneFree(), NoOffer2()),
+    "orange" -> Item("orange", price = 0.25, BuyTwoGetOneFree(), NoOffer2()),
+    "banana" -> Item("banana", price = 0.20, NoOffer(), OfferCheapestFree("apple", "banana"))
   )
 
   test("should return 0.00 if no items") {
