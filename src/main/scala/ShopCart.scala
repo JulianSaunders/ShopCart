@@ -68,7 +68,8 @@ object ShopCart {
     val itemTotalsAfterOffers = itemCountsAfterOffers2.map((key, quantity) => (key, products(key).price * quantity))
     println(s"${itemCounts.mkString("[", ",", "]")} => ${itemCountsAfterOffers2.mkString("[", ",", "]")} => $itemTotalsAfterOffers")
 
-    val sumItemTotals = itemTotalsAfterOffers.foldLeft(BigDecimal("0.00")) { case (a, (_, v)) => a + v }
+    val sumItemTotals = itemTotalsAfterOffers.foldLeft(BigDecimal("0.00")) { case (a, _ -> v) => a + v }
+
     println(s"£$sumItemTotals")
     sumItemTotals
   }
