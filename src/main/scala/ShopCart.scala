@@ -22,10 +22,10 @@ object ShopCart {
 
   class BuyTwoGetOneFree extends Offer {
     override def calcUnitsWithOffer(quantity: Int, item: Item): Int = {
-      val redeemedOfferCount = quantity / 3
-      val remainderUnits = quantity - (redeemedOfferCount * 3)
-      val totalUnitsToBill = (redeemedOfferCount * 2) + remainderUnits
-      if (redeemedOfferCount > 0) println(s"BuyTwoGetOneFree offer applied for '${item.sku}'  quantity=$quantity  redeemedOfferCount=$redeemedOfferCount  remainderUnits=$remainderUnits  totalUnitsToBill=$totalUnitsToBill")
+      val redeemedOfferUnits = quantity / 3
+      val remainderUnits = quantity - (redeemedOfferUnits * 3)
+      val totalUnitsToBill = (redeemedOfferUnits * 2) + remainderUnits
+      if (redeemedOfferUnits > 0) println(s"BuyTwoGetOneFree offer applied for '${item.sku}'  quantity=$quantity  redeemedOfferUnits=$redeemedOfferUnits  remainderUnits=$remainderUnits  totalUnitsToBill=$totalUnitsToBill")
       totalUnitsToBill
     }
   }
@@ -57,13 +57,13 @@ object ShopCart {
 
   def calcTotal(items: List[String], products: Map[String, Item]): BigDecimal = {
     val itemCounts = items.map(_.trim.toLowerCase).filter(products.isDefinedAt).groupMapReduce(identity)(_ => 1)(_ + _)
-    println(s"itemCounts= $itemCounts\n-------")
+    println(s"itemCounts= $itemCounts\n-------")   // eg. itemCounts= Map(banana -> 3, orange -> 1, apple -> 3)
 
     val itemCountsAfterOffers1 = itemCounts.map((k, v) => (k, products(k).offer.calcUnitsWithOffer(v, products(k))))
-    println(s"itemCountsAfterOffers1= $itemCountsAfterOffers1\n-------")
+    println(s"itemCountsAfterOffers1= $itemCountsAfterOffers1\n-------")   // eg.  itemCountsAfterOffers1= Map(banana -> 3, orange -> 1, apple -> 2)
 
     val itemCountsAfterOffers2 = itemCountsAfterOffers1.map((k, v) => (k, products(k).offer2.calcUnitsWithOffer2(itemCountsAfterOffers1, products, k)))
-    println(s"itemCountsAfterOffers2= $itemCountsAfterOffers2\n-------")
+    println(s"itemCountsAfterOffers2= $itemCountsAfterOffers2\n-------")   // eg.  itemCountsAfterOffers2= Map(banana -> 1, orange -> 1, apple -> 2)
 
     val itemTotalsAfterOffers = itemCountsAfterOffers2.map((key, quantity) => (key, products(key).price * quantity))
     println(s"${itemCounts.mkString("[", ",", "]")} => ${itemCountsAfterOffers2.mkString("[", ",", "]")} => $itemTotalsAfterOffers")
