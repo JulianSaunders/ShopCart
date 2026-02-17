@@ -4,24 +4,24 @@ import org.scalatest.funsuite.AnyFunSuite
 
 class ShopCartTest extends AnyFunSuite:
 
-  val products1 = Map(
+  private val products1 = Map(
     "apple" -> Item("apple", price = 0.60, BuyOneGetOneFree(), NoOffer2()),
     "orange" -> Item("orange", price = 0.25, BuyTwoGetOneFree(), NoOffer2())
   )
 
-  val products2_bananaCheapest = Map(
+  private val products2_bananaCheapest = Map(
     "apple" -> Item("apple", price = 0.60, BuyOneGetOneFree(), NoOffer2()),
     "orange" -> Item("orange", price = 0.25, BuyTwoGetOneFree(), NoOffer2()),
     "banana" -> Item("banana", price = 0.20, NoOffer(), OfferCheapestFree("apple", "banana"))
   )
 
-  val products3_appleCheapest = Map(
+  private val products3_appleCheapest = Map(
     "apple" -> Item("apple", price = 0.10, BuyOneGetOneFree(), OfferCheapestFree("apple", "banana")),
     "orange" -> Item("orange", price = 0.25, BuyTwoGetOneFree(), NoOffer2()),
     "banana" -> Item("banana", price = 0.20, NoOffer(), NoOffer2())
   )
 
-  val products4_appleSamePriceAsBanana = Map(
+  private val products4_appleSamePriceAsBanana = Map(
     "apple" -> Item("apple", price = 0.20, BuyOneGetOneFree(), NoOffer2()),
     "orange" -> Item("orange", price = 0.25, BuyTwoGetOneFree(), NoOffer2()),
     "banana" -> Item("banana", price = 0.20, NoOffer(), OfferCheapestFree("apple", "banana"))
